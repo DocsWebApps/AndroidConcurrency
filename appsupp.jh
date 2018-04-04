@@ -1,0 +1,58 @@
+entity Team {
+	firstName String required,
+    lastName String required,
+    image ImageBlob
+}
+
+entity Role {
+	name String required
+}
+
+entity ProblemStatus {
+	status String required
+}
+
+entity ProblemRecordStatus {
+    status String required
+}
+
+entity ProblemRecord {
+	statement TextBlob required
+}
+
+entity ApplicationStatus {
+	status String required
+}
+
+entity ProblemSeverity {
+	severity String required
+}
+
+entity Application {
+	name String required
+    previousProblemCount Long required min(0)
+    lastProblemDate LocalDate,
+}
+
+entity Problem {
+	openedAt ZonedDateTime required,
+    closedAt ZonedDateTime,
+    description String required
+}
+
+relationship ManyToOne {
+	Application{appStat required} to ApplicationStatus,
+	Problem{probApp required} to Application,
+    Problem{probStat required} to ProblemStatus,
+    Problem{probSev required} to ProblemSeverity,
+    Problem{probRec} to ProblemRecord,
+    ProblemRecord{probRecStat required} to ProblemRecordStatus,
+    ProblemRecord{probAssigned} to Team
+    Role{} to Team
+}
+
+paginate Problem with infinite-scroll
+
+dto * with mapstruct
+
+service all with serviceClass
